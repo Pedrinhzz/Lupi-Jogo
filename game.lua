@@ -1,6 +1,5 @@
--- ===========================
--- CONFIGURAÇÃO E PALETA Lupi
--- ===========================
+require "sprites"
+
 local Palette = {
     0x0000, -- 0: Preto
     0x0000, -- 1
