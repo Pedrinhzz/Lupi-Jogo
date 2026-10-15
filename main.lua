@@ -1,7 +1,6 @@
 -- ===========================
 -- CONFIGURAÇÃO E PALETA Lupi
 -- ===========================
--- A paleta usa o formato RGB555 de 15 bits[cite: 1]
 local Palette = {
     0x0000, -- 0: Preto
     0x0000, -- 1
@@ -39,11 +38,9 @@ local game_over = false
 -- ===========================
 -- LOOP PRINCIPAL
 -- ===========================
--- O callback principal deve se chamar update(frame) no Lupi[cite: 1]
 function update(frame)
-    -- Registra a paleta de cores a cada frame[cite: 1]
     for i = 1, #Palette do
-        ui.palset(i - 1, Palette[i])[cite: 1]
+        ui.palset(i - 1, Palette[i])
     end
 
     if game_over then
@@ -88,7 +85,7 @@ function update(frame)
                 spawn_timer = 0
                 local obs_type = math.random(1, 2)
                 table.insert(obstacles, {
-                    x = 500, -- Nasce fora da tela à direita
+                    x = 500,
                     y = (obs_type == 1) and (floor_y - 20) or (floor_y - 80),
                     w = 20, h = 20, type = obs_type
                 })
@@ -113,41 +110,41 @@ function update(frame)
     -- ===========================
     -- RENDERIZAÇÃO
     -- ===========================
-    ui.cls(0) -- Fundo preto
+    ui.cls(0)
 
     local cx = glitch.cam_x
     local cy = glitch.cam_y
 
     -- Linhas do Teto e Chão
-    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)[cite: 1]
-    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)[cite: 1]
+    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)
+    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
 
-    -- Efeitos visuais do System Failure no fundo
+    -- Efeitos visuais
     if glitch.active then
         for i = 1, 5 do
             local rx = math.random(0, 460)
             local ry = math.random(30, 200)
             local rw = math.random(20, 80)
             local c = math.random(8, 14)
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)[cite: 1]
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
         end
     end
 
     -- Desenha Obstáculos
     for _, obs in ipairs(obstacles) do
-        local c = 8 -- Vermelho para o chão
-        if obs.type == 2 then c = 10 end -- Amarelo para aéreo
-        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)[cite: 1]
+        local c = 8
+        if obs.type == 2 then c = 10 end
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
     end
 
-    -- Desenha Player (Cubo Azul)
-    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)[cite: 1]
+    -- Desenha Player
+    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
 
-    -- Tela de Game Over "System Crashed"
+    -- Tela de Game Over
     if game_over then
-        ui.rectfill(140, 100, 340, 170, 0) -- Fundo preto
-        ui.rect(140, 100, 340, 170, 8)     -- Borda vermelha
-        ui.rectfill(160, 120, 320, 150, 8) -- Bloco de "Erro" vermelho simulando texto
+        ui.rectfill(140, 100, 340, 170, 0)
+        ui.rect(140, 100, 340, 170, 8)
+        ui.rectfill(160, 120, 320, 150, 8)
     end
 end
 
