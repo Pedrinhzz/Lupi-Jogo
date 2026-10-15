@@ -14,10 +14,9 @@ local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x 
 local game_over = false
 
 function update(frame)
-
-    -- Registro obrigatório da paleta a cada frame[cite: 4]
+    -- Registro obrigatório da paleta a cada frame[cite: 2, 6]
     for i = 1, #Palette do
-        ui.palset(i - 1, Palette[i])[cite: 3]
+        ui.palset(i - 1, Palette[i])[cite: 2, 6]
     end
 
     if game_over then
@@ -85,24 +84,14 @@ function update(frame)
         end
     end
 
-    ui.cls(0)[cite: 5]
+    ui.cls(0)[cite: 4]
 
     local cx = glitch.cam_x
     local cy = glitch.cam_y
 
-    -- Linha do Teto
-    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)[cite: 5]
-
-    -- Renderização do Chão e Subsolo com tiles de 8x8
-    for x = 0, 480, 8 do
-        -- Camada superior do chão ("Ground")
-        ui.tile(Ground, 0, x + cx, floor_y + cy)[cite: 5]
-
-        -- Camadas de subsolo ("Underground") logo abaixo até o final da tela (270px)
-        for y = floor_y + 8, 270, 8 do
-            ui.tile(Underground, 0, x + cx, y + cy)[cite: 5]
-        end
-    end
+    -- Linhas do Teto e Chão retornadas para o formato de linha simples[cite: 4]
+    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)[cite: 4]
+    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)[cite: 4]
 
     -- Efeitos visuais
     if glitch.active then
@@ -114,25 +103,25 @@ function update(frame)
             local ry = math.random(30, 200)
             local rw = math.random(20, 80)
             local c = math.random(8, 14)
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)[cite: 5]
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)[cite: 4]
         end
     end
 
-    -- Desenha Obstáculos com tiles (substituindo o rectfill antigo)
+    -- Desenha Obstáculos
     for _, obs in ipairs(obstacles) do
-        local tile_id = 0
-        if obs.type == 2 then tile_id = 1 end
-        ui.tile(Sprites.Underground, tile_id, obs.x + cx, obs.y + cy)[cite: 5]
+        local c = 8
+        if obs.type == 2 then c = 10 end
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)[cite: 4]
     end
 
     -- Desenha Player
-    ui.spr(Sprites.character, player.x + cx, player.y + cy - 16)[cite: 5]
+    ui.spr(Sprites.character, player.x + cx, player.y + cy - 16)[cite: 4]
 
     -- Tela de Game Over
     if game_over then
-        ui.rectfill(140, 100, 340, 170, 0)[cite: 5]
-        ui.rect(140, 100, 340, 170, 8)[cite: 5]
-        ui.rectfill(160, 120, 320, 150, 8)[cite: 5]
+        ui.rectfill(140, 100, 340, 170, 0)[cite: 4]
+        ui.rect(140, 100, 340, 170, 8)[cite: 4]
+        ui.rectfill(160, 120, 320, 150, 8)[cite: 4]
     end
 end
 
