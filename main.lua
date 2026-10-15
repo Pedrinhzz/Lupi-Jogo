@@ -1,6 +1,7 @@
 -- ===========================
 -- CONFIGURAÇÃO E PALETA Lupi
 -- ===========================
+-- O Lupi utiliza um formato de cor de 16 bits (RGB 555)[cite: 2]
 local Palette = {
     0x0000, -- 0: Preto
     0x0000, -- 1
@@ -36,16 +37,17 @@ local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x 
 local game_over = false
 
 -- ===========================
--- LOOP PRINCIPAL
+-- LOOP PRINCIPAL (Motor Lupi)
 -- ===========================
+-- A função principal deve chamar-se update(frame)[cite: 2, 6]
 function update(frame)
-    -- O Lupi exige que a paleta seja registrada a cada frame
+    -- Regista a paleta de cores a cada frame[cite: 2, 6]
     for i = 1, #Palette do
-        ui.palset(i - 1, Palette[i])
+        ui.palset(i - 1, Palette[i])[cite: 2, 4]
     end
 
     if game_over then
-        if ui.btnp(BTN_Z) or ui.btnp(UP) then
+        if ui.btnp(BTN_Z) or ui.btnp(UP) then[cite: 4]
             reset_game()
         end
     else
@@ -72,7 +74,7 @@ function update(frame)
             end
 
             -- Pulo
-            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
+            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then[cite: 4]
                 if glitch.active and glitch.type == 2 then
                     player.vy = -jump_force
                 else
@@ -111,14 +113,14 @@ function update(frame)
     -- ===========================
     -- RENDERIZAÇÃO
     -- ===========================
-    ui.cls(0)
+    ui.cls(0)[cite: 3]
 
     local cx = glitch.cam_x
     local cy = glitch.cam_y
 
     -- Linhas do Teto e Chão
-    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)
-    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
+    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)[cite: 3]
+    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)[cite: 3]
 
     -- Efeitos visuais
     if glitch.active then
@@ -127,7 +129,7 @@ function update(frame)
             local ry = math.random(30, 200)
             local rw = math.random(20, 80)
             local c = math.random(8, 14)
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)[cite: 3]
         end
     end
 
@@ -135,17 +137,17 @@ function update(frame)
     for _, obs in ipairs(obstacles) do
         local c = 8
         if obs.type == 2 then c = 10 end
-        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)[cite: 3]
     end
 
     -- Desenha Player
-    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
+    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)[cite: 3]
 
     -- Tela de Game Over
     if game_over then
-        ui.rectfill(140, 100, 340, 170, 0)
-        ui.rect(140, 100, 340, 170, 8)
-        ui.rectfill(160, 120, 320, 150, 8)
+        ui.rectfill(140, 100, 340, 170, 0)[cite: 3]
+        ui.rect(140, 100, 340, 170, 8)[cite: 3]
+        ui.rectfill(160, 120, 320, 150, 8)[cite: 3]
     end
 end
 
