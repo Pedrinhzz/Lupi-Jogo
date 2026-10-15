@@ -11,21 +11,19 @@ local spawn_timer = 0
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
 local game_over = false
 
--- A LUPI CHAMA ESTA FUNÇÃO A CADA FRAME
 function loop()
     -- ==========================================
     -- 1. UPDATE (LÓGICA)
     -- ==========================================
     if game_over then
-        if btnp(0) or btnp(1) or btnp(4) then
+        -- TROCADO AQUI: btnp por btn
+        if btn(0) or btn(1) or btn(4) then
             reset_game()
         end
     else
         update_glitches()
 
-        -- Se o glitch não for o de congelar a tela (Freeze = 3), roda a física
         if not (glitch.active and glitch.type == 3) then
-            -- Gravidade
             local current_gravity = gravity
             if glitch.active and glitch.type == 2 then current_gravity = -gravity end
 
@@ -44,8 +42,8 @@ function loop()
                 player.grounded = false
             end
 
-            -- Pulo
-            if (btnp(0) or btnp(4)) and player.grounded then
+            -- TROCADO AQUI: btnp por btn
+            if (btn(0) or btn(4)) and player.grounded then
                 if glitch.active and glitch.type == 2 then
                     player.vy = -jump_force
                 else
@@ -53,7 +51,6 @@ function loop()
                 end
             end
 
-            -- Obstáculos
             spawn_timer = spawn_timer + 1
             if spawn_timer > 70 then
                 spawn_timer = 0
@@ -114,7 +111,7 @@ function loop()
         rectf(16, 40, 96, 48, 0)
         rect(16, 40, 96, 48, 8)
         print("SYSTEM CRASHED", 24, 48, 8)
-        print("PRESS A TO REBOOT", 20, 64, 7)
+        print("PRESS TO REBOOT", 20, 64, 7)
     end
 end
 
@@ -125,8 +122,7 @@ function update_glitches()
     if glitch.active then
         glitch.timer = glitch.timer - 1
         if glitch.type == 1 then
-            glitch.cam_x = math.random(-3, 3)
-            glitch.cam_y = math.random(-3, 3)
+            glitch.cam_x = math.random(-3, 3); glitch.cam_y = math.random(-3, 3)
         else
             glitch.cam_x = 0; glitch.cam_y = 0
         end
@@ -137,21 +133,4 @@ function update_glitches()
         end
     else
         glitch.next_trigger = glitch.next_trigger - 1
-        if glitch.next_trigger <= 0 then
-            glitch.active = true
-            glitch.type = math.random(1, 3)
-            glitch.timer = math.random(40, 90)
-            glitch.next_trigger = math.random(120, 240)
-        end
-    end
-end
-
-function check_collision(a, b)
-    return a.x < b.x + b.w and a.x + a.size > b.x and a.y < b.y + b.h and a.y + a.size > b.y
-end
-
-function reset_game()
-    player.y = floor_y; player.vy = 0
-    obstacles = {}; score = 0; spawn_timer = 0
-    glitch.active = false; game_over = false
-end
+        if glitch.next_
