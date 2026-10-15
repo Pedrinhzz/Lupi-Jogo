@@ -107,7 +107,6 @@ function update(dt)
         end
     end
 end
-===
 
 function update_glitches()
     if glitch.active then
