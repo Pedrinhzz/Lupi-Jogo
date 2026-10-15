@@ -1,4 +1,3 @@
--- Variáveis Iniciais
 local player = { x = 24, y = 96, vy = 0, size = 8, grounded = false }
 local gravity = 0.4
 local jump_force = -5.8
@@ -12,11 +11,7 @@ local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x 
 local game_over = false
 
 function loop()
-    -- ==========================================
-    -- 1. UPDATE (LÓGICA)
-    -- ==========================================
     if game_over then
-        -- TROCADO AQUI: btnp por btn
         if btn(0) or btn(1) or btn(4) then
             reset_game()
         end
@@ -42,7 +37,6 @@ function loop()
                 player.grounded = false
             end
 
-            -- TROCADO AQUI: btnp por btn
             if (btn(0) or btn(4)) and player.grounded then
                 if glitch.active and glitch.type == 2 then
                     player.vy = -jump_force
@@ -78,9 +72,6 @@ function loop()
         end
     end
 
-    -- ==========================================
-    -- 2. DRAW (RENDERIZAÇÃO)
-    -- ==========================================
     cls(0)
     camera(glitch.cam_x, glitch.cam_y)
 
@@ -115,9 +106,6 @@ function loop()
     end
 end
 
--- ==========================================
--- FUNÇÕES AUXILIARES
--- ==========================================
 function update_glitches()
     if glitch.active then
         glitch.timer = glitch.timer - 1
@@ -133,4 +121,21 @@ function update_glitches()
         end
     else
         glitch.next_trigger = glitch.next_trigger - 1
-        if glitch.next_
+        if glitch.next_trigger <= 0 then
+            glitch.active = true
+            glitch.type = math.random(1, 3)
+            glitch.timer = math.random(40, 90)
+            glitch.next_trigger = math.random(120, 240)
+        end
+    end
+end
+
+function check_collision(a, b)
+    return a.x < b.x + b.w and a.x + a.size > b.x and a.y < b.y + b.h and a.y + a.size > b.y
+end
+
+function reset_game()
+    player.y = floor_y; player.vy = 0
+    obstacles = {}; score = 0; spawn_timer = 0
+    glitch.active = false; game_over = false
+end
