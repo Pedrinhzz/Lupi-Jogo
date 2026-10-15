@@ -35,11 +35,14 @@ local spawn_timer = 0
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
 local game_over = false
 
+-- ATENÇÃO: Substitua estas variáveis pelos seus assets reais carregados pelo motor
+local spr_player = {} 
+local spr_obstacle = {} 
+
 -- ===========================
 -- LOOP PRINCIPAL
 -- ===========================
 function update(frame)
-    -- Registro obrigatório da paleta a cada frame
     for i = 1, #Palette do
         ui.palset(i - 1, Palette[i])
     end
@@ -122,69 +125,4 @@ function update(frame)
 
     -- Efeitos visuais
     if glitch.active then
-        -- Texto indicativo de erro acima da margem superior
-        ui.print("Error!!", 220 + cx, 8 + cy, 8)
-
-        for i = 1, 5 do
-            local rx = math.random(0, 460)
-            local ry = math.random(30, 200)
-            local rw = math.random(20, 80)
-            local c = math.random(8, 14)
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
-        end
-    end
-
-    -- Desenha Obstáculos
-    for _, obs in ipairs(obstacles) do
-        local c = 8
-        if obs.type == 2 then c = 10 end
-        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
-    end
-
-    -- Desenha Player
-    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
-
-    -- Tela de Game Over
-    if game_over then
-        ui.rectfill(140, 100, 340, 170, 0)
-        ui.rect(140, 100, 340, 170, 8)
-        ui.rectfill(160, 120, 320, 150, 8)
-    end
-end
-
--- ===========================
--- FUNÇÕES AUXILIARES
--- ===========================
-function update_glitches()
-    if glitch.active then
-        glitch.timer = glitch.timer - 1
-        if glitch.type == 1 then
-            glitch.cam_x = math.random(-6, 6); glitch.cam_y = math.random(-6, 6)
-        else
-            glitch.cam_x = 0; glitch.cam_y = 0
-        end
-        
-        if glitch.timer <= 0 then
-            glitch.active = false
-            glitch.cam_x = 0; glitch.cam_y = 0
-        end
-    else
-        glitch.next_trigger = glitch.next_trigger - 1
-        if glitch.next_trigger <= 0 then
-            glitch.active = true
-            glitch.type = math.random(1, 3)
-            glitch.timer = math.random(40, 90)
-            glitch.next_trigger = math.random(120, 240)
-        end
-    end
-end
-
-function check_collision(a, b)
-    return a.x < b.x + b.w and a.x + a.size > b.x and a.y < b.y + b.h and a.y + a.size > b.y
-end
-
-function reset_game()
-    player.y = floor_y - player.size; player.vy = 0
-    obstacles = {}; score = 0; spawn_timer = 0
-    glitch.active = false; game_over = false
-end
+        -- Texto indic
