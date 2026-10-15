@@ -166,7 +166,7 @@ function update(frame)
 
     -- Desenha Player
 
-    ui.spr(Sprites.character, player.x + cx, player.y + cy)
+    ui.spr(Sprites.character, player.x + cx, player.y + cy +16)
 
 
 
