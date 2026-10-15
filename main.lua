@@ -12,7 +12,8 @@ local game_over = false
 
 function loop()
     if game_over then
-        if btn(0) or btn(1) or btn(4) then
+        -- Usando ui.btnp para reiniciar
+        if ui.btnp(BTN_Z) or ui.btnp(UP) then
             reset_game()
         end
     else
@@ -37,7 +38,8 @@ function loop()
                 player.grounded = false
             end
 
-            if (btn(0) or btn(4)) and player.grounded then
+            -- Usando ui.btn para pular (Seta pra cima ou botão Z)
+            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
                 if glitch.active and glitch.type == 2 then
                     player.vy = -jump_force
                 else
@@ -102,7 +104,7 @@ function loop()
         rectf(16, 40, 96, 48, 0)
         rect(16, 40, 96, 48, 8)
         print("SYSTEM CRASHED", 24, 48, 8)
-        print("PRESS TO REBOOT", 20, 64, 7)
+        print("PRESS Z TO REBOOT", 20, 64, 7)
     end
 end
 
