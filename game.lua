@@ -188,20 +188,6 @@ function update(frame)
 
     ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
 
-    -- Renderização do Chão e Subsolo em Tiles (8x8)
-    -- O laço percorre a largura da tela de 8 em 8 pixels
-    for x = 0, 480, 8 do
-        -- Desenha a camada superior do chão ("Ground")
-        ui.tile(Ground, 0, x + cx, floor_y + cy)
-
-        -- Desenha camadas de subsolo ("Underground") logo abaixo do chão até o final da tela (270px)
-        for y = floor_y + 8, 270, 8 do
-            ui.tile(Underground, 0, x + cx, y + cy)
-        end
-    end
-
-
-
     -- Efeitos visuais
 
     if glitch.active then
