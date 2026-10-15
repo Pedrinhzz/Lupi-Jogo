@@ -122,6 +122,9 @@ function update(frame)
 
     -- Efeitos visuais
     if glitch.active then
+        -- Texto indicativo de erro acima da margem superior
+        ui.print("falha", 220 + cx, 8 + cy, 8)
+
         for i = 1, 5 do
             local rx = math.random(0, 460)
             local ry = math.random(30, 200)
