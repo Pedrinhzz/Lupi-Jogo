@@ -1,6 +1,3 @@
--- ===========================
--- CONFIGURAÇÃO E PALETA Lupi
--- ===========================
 local Palette = {
     0x0000, -- 0: Preto
     0x0000, -- 1
@@ -20,9 +17,6 @@ local Palette = {
     0x0000  -- 15
 }
 
--- ===========================
--- VARIÁVEIS GLOBAIS
--- ===========================
 local player = { x = 60, y = 200, vy = 0, size = 20, grounded = false }
 local gravity = 0.6
 local jump_force = -11.0
@@ -35,9 +29,6 @@ local spawn_timer = 0
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
 local game_over = false
 
--- ===========================
--- LOOP PRINCIPAL
--- ===========================
 function update(frame)
     for i = 1, #Palette do
         ui.palset(i - 1, Palette[i])
@@ -107,9 +98,6 @@ function update(frame)
         end
     end
 
-    -- ===========================
-    -- RENDERIZAÇÃO
-    -- ===========================
     ui.cls(0)
 
     local cx = glitch.cam_x
@@ -148,9 +136,6 @@ function update(frame)
     end
 end
 
--- ===========================
--- FUNÇÕES AUXILIARES
--- ===========================
 function update_glitches()
     if glitch.active then
         glitch.timer = glitch.timer - 1
