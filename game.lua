@@ -43,7 +43,6 @@ function update(frame)
         ui.palset(i - 1, Palette[i])
     end
 
-    ui.spr(Sprites.Player,1,1)
     
     if game_over then
         if ui.btnp(BTN_Z) or ui.btnp(UP) then
@@ -144,6 +143,7 @@ function update(frame)
 
     -- Desenha Player
     ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
+    ui.spr(Sprites.Player,1,1)
 
     -- Tela de Game Over
     if game_over then
