@@ -39,6 +39,7 @@ local game_over = false
 -- LOOP PRINCIPAL
 -- ===========================
 function update(frame)
+    -- O Lupi exige que a paleta seja registrada a cada frame
     for i = 1, #Palette do
         ui.palset(i - 1, Palette[i])
     end
