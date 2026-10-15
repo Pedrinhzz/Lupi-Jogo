@@ -125,4 +125,69 @@ function update(frame)
 
     -- Efeitos visuais
     if glitch.active then
-        -- Texto indic
+        -- Texto indicativo de erro desenhado acima da margem superior
+        ui.print("Error!", 220 + cx, 8 + cy, 8)
+
+        for i = 1, 5 do
+            local rx = math.random(0, 460)
+            local ry = math.random(30, 200)
+            local rw = math.random(20, 80)
+            local c = math.random(8, 14)
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
+        end
+    end
+
+    -- Desenha Obstáculos utilizando sprites
+    for _, obs in ipairs(obstacles) do
+        local tile_id = 0
+        if obs.type == 2 then tile_id = 1 end 
+        ui.tile(spr_obstacle, tile_id, obs.x + cx, obs.y + cy)
+    end
+
+    -- Desenha Player utilizando sprites
+    ui.spr(spr_player, player.x + cx, player.y + cy)
+
+    -- Tela de Game Over
+    if game_over then
+        ui.rectfill(140, 100, 340, 170, 0)
+        ui.rect(140, 100, 340, 170, 8)
+        ui.rectfill(160, 120, 320, 150, 8)
+    end
+end
+
+-- ===========================
+-- FUNÇÕES AUXILIARES
+-- ===========================
+function update_glitches()
+    if glitch.active then
+        glitch.timer = glitch.timer - 1
+        if glitch.type == 1 then
+            glitch.cam_x = math.random(-6, 6); glitch.cam_y = math.random(-6, 6)
+        else
+            glitch.cam_x = 0; glitch.cam_y = 0
+        end
+        
+        if glitch.timer <= 0 then
+            glitch.active = false
+            glitch.cam_x = 0; glitch.cam_y = 0
+        end
+    else
+        glitch.next_trigger = glitch.next_trigger - 1
+        if glitch.next_trigger <= 0 then
+            glitch.active = true
+            glitch.type = math.random(1, 3)
+            glitch.timer = math.random(40, 90)
+            glitch.next_trigger = math.random(120, 240)
+        end
+    end
+end
+
+function check_collision(a, b)
+    return a.x < b.x + b.w and a.x + a.size > b.x and a.y < b.y + b.h and a.y + a.size > b.y
+end
+
+function reset_game()
+    player.y = floor_y - player.size; player.vy = 0
+    obstacles = {}; score = 0; spawn_timer = 0
+    glitch.active = false; game_over = false
+end
