@@ -15,172 +15,172 @@ local game_over = false
 
 function update(frame)
 
-    -- Registro obrigatório da paleta a cada frame
-    for i = 1, #Palette do
-        ui.palset(i - 1, Palette[i])
-    end
+    -- Registro obrigatório da paleta a cada frame
+    for i = 1, #Palette do
+        ui.palset(i - 1, Palette[i])
+    end
 
-    if game_over then
-        if ui.btnp(BTN_Z) or ui.btnp(UP) then
-            reset_game()
-        end
-    else
-        update_glitches()
+    if game_over then
+        if ui.btnp(BTN_Z) or ui.btnp(UP) then
+            reset_game()
+        end
+    else
+        update_glitches()
 
-        if not (glitch.active and glitch.type == 3) then
-            local current_gravity = gravity
-            if glitch.active and glitch.type == 2 then current_gravity = -gravity end
-            
-            player.vy = player.vy + current_gravity
-            player.y = player.y + player.vy
+        if not (glitch.active and glitch.type == 3) then
+            local current_gravity = gravity
+            if glitch.active and glitch.type == 2 then current_gravity = -gravity end
 
-            -- Colisão Chão e Teto
-            
-            if player.y >= floor_y - player.size then
-                player.y = floor_y - player.size
-                player.vy = 0
-                player.grounded = true
-            elseif player.y <= 20 then
-                player.y = 20
-                player.vy = 0
-                player.grounded = true
-            else
-                player.grounded = false
-            end
+            player.vy = player.vy + current_gravity
+            player.y = player.y + player.vy
 
-            -- Pulo
-            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
-                if glitch.active and glitch.type == 2 then
-                    player.vy = -jump_force
-                else
-                    player.vy = jump_force
-                end
-            end
-            -- Geração de Obstáculos
+            -- Colisão Chão e Teto
 
-            spawn_timer = spawn_timer + 1
+            if player.y >= floor_y - player.size then
+                player.y = floor_y - player.size
+                player.vy = 0
+                player.grounded = true
+            elseif player.y <= 20 then
+                player.y = 20
+                player.vy = 0
+                player.grounded = true
+            else
+                player.grounded = false
+            end
 
-            if spawn_timer > 60 then
-                spawn_timer = 0
-                local obs_type = math.random(1, 2)
-                table.insert(obstacles, {
-                    x = 500,
-                    y = (obs_type == 1) and (floor_y - 20) or (floor_y - 80),
-                    w = 20, h = 20, type = obs_type
+            -- Pulo
+            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
+                if glitch.active and glitch.type == 2 then
+                    player.vy = -jump_force
+                else
+                    player.vy = jump_force
+                end
+            end
+            -- Geração de Obstáculos
 
-                })
+            spawn_timer = spawn_timer + 1
 
-            end
+            if spawn_timer > 60 then
+                spawn_timer = 0
+                local obs_type = math.random(1, 2)
+                table.insert(obstacles, {
+                    x = 500,
+                    y = (obs_type == 1) and (floor_y - 20) or (floor_y - 80),
+                    w = 20, h = 20, type = obs_type
 
+                })
 
+            end
 
-            for i = #obstacles, 1, -1 do
 
-                local obs = obstacles[i]
 
-                obs.x = obs.x - speed
+            for i = #obstacles, 1, -1 do
 
+                local obs = obstacles[i]
 
+                obs.x = obs.x - speed
 
-                if check_collision(player, obs) then
 
-                    game_over = true
 
-                end
+                if check_collision(player, obs) then
 
+                    game_over = true
 
+                end
 
-                if obs.x < -40 then
 
-                    table.remove(obstacles, i)
 
-                    score = score + 10
+                if obs.x < -40 then
 
-                end
+                    table.remove(obstacles, i)
 
-            end
+                    score = score + 10
 
-        end
+                end
 
-    end
+            end
 
+        end
 
+    end
 
-    ui.cls(0)
 
 
+    ui.cls(0)
 
-    local cx = glitch.cam_x
 
-    local cy = glitch.cam_y
 
+    local cx = glitch.cam_x
 
+    local cy = glitch.cam_y
 
-    -- Linhas do Teto e Chão
 
-    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)
 
-    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
+    -- Linhas do Teto e Chão
 
-    -- Efeitos visuais
+    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)
 
-    if glitch.active then
+    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
 
-        -- Texto indicativo de erro acima da margem superior
+    -- Efeitos visuais
 
-        ui.print("falha", 220 + cx, 8 + cy, 8)
+    if glitch.active then
 
+        -- Texto indicativo de erro acima da margem superior
 
+        ui.print("falha", 220 + cx, 8 + cy, 8)
 
-        for i = 1, 5 do
 
-            local rx = math.random(0, 460)
 
-            local ry = math.random(30, 200)
+        for i = 1, 5 do
 
-            local rw = math.random(20, 80)
+            local rx = math.random(0, 460)
 
-            local c = math.random(8, 14)
+            local ry = math.random(30, 200)
 
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
+            local rw = math.random(20, 80)
 
-        end
+            local c = math.random(8, 14)
 
-    end
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
 
+        end
 
+    end
 
-    -- Desenha Obstáculos
 
-    for _, obs in ipairs(obstacles) do
 
-        local c = 8
+    -- Desenha Obstáculos
 
-        if obs.type == 2 then c = 10 end
+    for _, obs in ipairs(obstacles) do
 
-        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
+        local c = 8
 
-    end
+        if obs.type == 2 then c = 10 end
 
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
 
+    end
 
-    -- Desenha Player
 
-    ui.spr(Sprites.character, player.x + cx, player.y + cy - 16)
 
+    -- Desenha Player
 
+    ui.spr(Sprites.character, player.x + cx, player.y + cy - 16)
 
-    -- Tela de Game Over
 
-    if game_over then
 
-        ui.rectfill(140, 100, 340, 170, 0)
+    -- Tela de Game Over
 
-        ui.rect(140, 100, 340, 170, 8)
+    if game_over then
 
-        ui.rectfill(160, 120, 320, 150, 8)
+        ui.rectfill(140, 100, 340, 170, 0)
 
-    end
+        ui.rect(140, 100, 340, 170, 8)
+
+        ui.rectfill(160, 120, 320, 150, 8)
+
+    end
 
 end
 
@@ -188,50 +188,50 @@ end
 
 function update_glitches()
 
-    if glitch.active then
+    if glitch.active then
 
-        glitch.timer = glitch.timer - 1
+        glitch.timer = glitch.timer - 1
 
-        if glitch.type == 1 then
+        if glitch.type == 1 then
 
-            glitch.cam_x = math.random(-6, 6); glitch.cam_y = math.random(-6, 6)
+            glitch.cam_x = math.random(-6, 6); glitch.cam_y = math.random(-6, 6)
 
-        else
+        else
 
-            glitch.cam_x = 0; glitch.cam_y = 0
+            glitch.cam_x = 0; glitch.cam_y = 0
 
-        end
+        end
 
-        
 
-        if glitch.timer <= 0 then
 
-            glitch.active = false
+        if glitch.timer <= 0 then
 
-            glitch.cam_x = 0; glitch.cam_y = 0
+            glitch.active = false
 
-        end
+            glitch.cam_x = 0; glitch.cam_y = 0
 
-    else
+        end
 
-        glitch.next_trigger = glitch.next_trigger - 1
+    else
 
-        if glitch.next_trigger <= 0 then
+        glitch.next_trigger = glitch.next_trigger - 1
 
-            glitch.active = true
+        if glitch.next_trigger <= 0 then
 
-            glitch.type = math.random(1, 3)
+            glitch.active = true
 
-            glitch.timer = math.random(40, 90)
+            glitch.type = math.random(1, 3)
 
-            glitch.next_trigger = math.random(120, 240)
-        end
-    end
+            glitch.timer = math.random(40, 90)
+
+            glitch.next_trigger = math.random(120, 240)
+        end
+    end
 end
 
 function check_collision(a, b)
 
-    return a.x < b.x + b.w and a.x + a.size > b.x and a.y < b.y + b.h and a.y + a.size > b.y
+    return a.x < b.x + b.w and a.x + a.size > b.x and a.y < b.y + b.h and a.y + a.size > b.y
 
 end
 
@@ -239,10 +239,10 @@ end
 
 function reset_game()
 
-    player.y = floor_y - player.size; player.vy = 0
+    player.y = floor_y - player.size; player.vy = 0
 
-    obstacles = {}; score = 0; spawn_timer = 0
+    obstacles = {}; score = 0; spawn_timer = 0
 
-    glitch.active = false; game_over = false
+    glitch.active = false; game_over = false
 
 end
