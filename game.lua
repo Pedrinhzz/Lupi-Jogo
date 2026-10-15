@@ -1,137 +1,71 @@
 require "sprites"
-
 require "palette"
 
-
-
-
-
 local player = { x = 60, y = 200, vy = 0, size = 20, grounded = false }
-
 local gravity = 0.6
-
 local jump_force = -11.0
-
 local floor_y = 220
-
 local score = 0
-
 local speed = 5
 
-
-
 local obstacles = {}
-
 local spawn_timer = 0
-
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
-
 local game_over = false
-
-
 
 function update(frame)
 
     -- Registro obrigatório da paleta a cada frame
-
     for i = 1, #Palette do
-
         ui.palset(i - 1, Palette[i])
-
     end
 
-
-
-    
-
     if game_over then
-
         if ui.btnp(BTN_Z) or ui.btnp(UP) then
-
             reset_game()
-
         end
-
     else
-
         update_glitches()
 
-
-
         if not (glitch.active and glitch.type == 3) then
-
             local current_gravity = gravity
-
             if glitch.active and glitch.type == 2 then current_gravity = -gravity end
-
-
-
+            
             player.vy = player.vy + current_gravity
-
             player.y = player.y + player.vy
 
-
-
             -- Colisão Chão e Teto
-
+            
             if player.y >= floor_y - player.size then
-
                 player.y = floor_y - player.size
-
                 player.vy = 0
-
                 player.grounded = true
-
             elseif player.y <= 20 then
-
                 player.y = 20
-
                 player.vy = 0
-
                 player.grounded = true
-
             else
-
                 player.grounded = false
-
             end
-
-
 
             -- Pulo
-
             if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
-
                 if glitch.active and glitch.type == 2 then
-
                     player.vy = -jump_force
-
                 else
-
                     player.vy = jump_force
-
                 end
-
             end
-
-
-
             -- Geração de Obstáculos
 
             spawn_timer = spawn_timer + 1
 
             if spawn_timer > 60 then
-
                 spawn_timer = 0
-
                 local obs_type = math.random(1, 2)
-
                 table.insert(obstacles, {
-
                     x = 500,
-
                     y = (obs_type == 1) and (floor_y - 20) or (floor_y - 80),
-
                     w = 20, h = 20, type = obs_type
 
                 })
