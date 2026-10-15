@@ -1,27 +1,7 @@
 require "sprites"
+require "palette"
 
-local Palette = {
-    0x0000, -- 0: Preto
-    0x0000, -- 1
-    0x0000, -- 2
-    0x0000, -- 3
-    0x0000, -- 4
-    0x0000, -- 5
-    0x0000, -- 6
-    0x7FFF, -- 7: Branco
-    0x7C00, -- 8: Vermelho puro
-    0x0000, -- 9
-    0x03FF, -- 10: Amarelo
-    0x0000, -- 11
-    0x001F, -- 12: Azul puro
-    0x0000, -- 13
-    0x7C1F, -- 14: Roxo
-    0x0000  -- 15
-}
 
--- ===========================
--- VARIÁVEIS GLOBAIS
--- ===========================
 local player = { x = 60, y = 200, vy = 0, size = 20, grounded = false }
 local gravity = 0.6
 local jump_force = -11.0
