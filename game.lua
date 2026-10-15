@@ -246,4 +246,3 @@ function reset_game()
     glitch.active = false; game_over = false
 
 end
-
