@@ -44,6 +44,8 @@ function update(frame)
         ui.palset(i - 1, Palette[i])
     end
 
+    ui.spr(Sprites.Player,1,1)
+    
     if game_over then
         if ui.btnp(BTN_Z) or ui.btnp(UP) then
             reset_game()
