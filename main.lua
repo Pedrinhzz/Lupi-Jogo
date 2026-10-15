@@ -1,3 +1,29 @@
+-- ===========================
+-- CONFIGURAÇÃO E PALETA Lupi
+-- ===========================
+-- A paleta usa o formato RGB555 de 15 bits[cite: 1]
+local Palette = {
+    0x0000, -- 0: Preto
+    0x0000, -- 1
+    0x0000, -- 2
+    0x0000, -- 3
+    0x0000, -- 4
+    0x0000, -- 5
+    0x0000, -- 6
+    0x7FFF, -- 7: Branco
+    0x7C00, -- 8: Vermelho puro
+    0x0000, -- 9
+    0x03FF, -- 10: Amarelo
+    0x0000, -- 11
+    0x001F, -- 12: Azul puro
+    0x0000, -- 13
+    0x7C1F, -- 14: Roxo
+    0x0000  -- 15
+}
+
+-- ===========================
+-- VARIÁVEIS GLOBAIS
+-- ===========================
 local player = { x = 60, y = 200, vy = 0, size = 20, grounded = false }
 local gravity = 0.6
 local jump_force = -11.0
@@ -10,7 +36,16 @@ local spawn_timer = 0
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
 local game_over = false
 
-function loop()
+-- ===========================
+-- LOOP PRINCIPAL
+-- ===========================
+-- O callback principal deve se chamar update(frame) no Lupi[cite: 1]
+function update(frame)
+    -- Registra a paleta de cores a cada frame[cite: 1]
+    for i = 1, #Palette do
+        ui.palset(i - 1, Palette[i])[cite: 1]
+    end
+
     if game_over then
         if ui.btnp(BTN_Z) or ui.btnp(UP) then
             reset_game()
@@ -84,8 +119,8 @@ function loop()
     local cy = glitch.cam_y
 
     -- Linhas do Teto e Chão
-    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)
-    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
+    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)[cite: 1]
+    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)[cite: 1]
 
     -- Efeitos visuais do System Failure no fundo
     if glitch.active then
@@ -94,7 +129,7 @@ function loop()
             local ry = math.random(30, 200)
             local rw = math.random(20, 80)
             local c = math.random(8, 14)
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)[cite: 1]
         end
     end
 
@@ -102,11 +137,11 @@ function loop()
     for _, obs in ipairs(obstacles) do
         local c = 8 -- Vermelho para o chão
         if obs.type == 2 then c = 10 end -- Amarelo para aéreo
-        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)[cite: 1]
     end
 
     -- Desenha Player (Cubo Azul)
-    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
+    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)[cite: 1]
 
     -- Tela de Game Over "System Crashed"
     if game_over then
@@ -116,6 +151,9 @@ function loop()
     end
 end
 
+-- ===========================
+-- FUNÇÕES AUXILIARES
+-- ===========================
 function update_glitches()
     if glitch.active then
         glitch.timer = glitch.timer - 1
