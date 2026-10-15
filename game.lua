@@ -14,9 +14,6 @@ local spawn_timer = 0
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
 local game_over = false
 
--- ===========================
--- LOOP PRINCIPAL
--- ===========================
 function update(frame)
     -- Registro obrigatório da paleta a cada frame
     for i = 1, #Palette do
@@ -88,9 +85,6 @@ function update(frame)
         end
     end
 
-    -- ===========================
-    -- RENDERIZAÇÃO
-    -- ===========================
     ui.cls(0)
 
     local cx = glitch.cam_x
@@ -122,8 +116,7 @@ function update(frame)
     end
 
     -- Desenha Player
-    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
-    ui.spr(Sprites.Player,1,1)
+    ui.spr(Sprites.Player, player.x + cx, player.y + cy)
 
     -- Tela de Game Over
     if game_over then
@@ -133,9 +126,6 @@ function update(frame)
     end
 end
 
--- ===========================
--- FUNÇÕES AUXILIARES
--- ===========================
 function update_glitches()
     if glitch.active then
         glitch.timer = glitch.timer - 1
