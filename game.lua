@@ -1,7 +1,6 @@
 require "sprites"
 require "palette"
 
-
 local player = { x = 60, y = 200, vy = 0, size = 20, grounded = false }
 local gravity = 0.6
 local jump_force = -11.0
@@ -15,14 +14,13 @@ local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x 
 local game_over = false
 
 function update(frame)
-    -- Registro obrigatório da paleta a cada frame
+    -- Registro obrigatório da paleta a cada frame[cite: 4]
     for i = 1, #Palette do
-        ui.palset(i - 1, Palette[i])
+        ui.palset(i - 1, Palette[i])[cite: 3]
     end
 
-    
     if game_over then
-        if ui.btnp(BTN_Z) or ui.btnp(UP) then
+        if ui.btnp(BTN_Z) or ui.btnp(UP) then[cite: 3]
             reset_game()
         end
     else
@@ -49,7 +47,7 @@ function update(frame)
             end
 
             -- Pulo
-            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
+            if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then[cite: 3]
                 if glitch.active and glitch.type == 2 then
                     player.vy = -jump_force
                 else
@@ -85,26 +83,36 @@ function update(frame)
         end
     end
 
-    ui.cls(0)
+    ui.cls(0)[cite: 5]
 
     local cx = glitch.cam_x
     local cy = glitch.cam_y
 
-    -- Linhas do Teto e Chão
-    ui.line(0 + cx, floor_y + cy, 480 + cx, floor_y + cy, 7)
-    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)
+    -- Linha do Teto
+    ui.line(0 + cx, 20 + cy, 480 + cx, 20 + cy, 7)[cite: 5]
+
+    -- Renderização do Chão e Subsolo com tiles de 8x8
+    for x = 0, 480, 8 do
+        -- Camada superior do chão ("Ground")
+        ui.tile(Ground, 0, x + cx, floor_y + cy)[cite: 5]
+
+        -- Camadas de subsolo ("Underground") logo abaixo até o final da tela (270px)
+        for y = floor_y + 8, 270, 8 do
+            ui.tile(Underground, 0, x + cx, y + cy)[cite: 5]
+        end
+    end
 
     -- Efeitos visuais
     if glitch.active then
         -- Texto indicativo de erro acima da margem superior
-        ui.print("falha", 220 + cx, 8 + cy, 8)
+        ui.print("falha", 220 + cx, 8 + cy, 8)[cite: 3]
 
         for i = 1, 5 do
             local rx = math.random(0, 460)
             local ry = math.random(30, 200)
             local rw = math.random(20, 80)
             local c = math.random(8, 14)
-            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 2 + cy, c)[cite: 5]
         end
     end
 
@@ -112,17 +120,17 @@ function update(frame)
     for _, obs in ipairs(obstacles) do
         local c = 8
         if obs.type == 2 then c = 10 end
-        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)[cite: 5]
     end
 
     -- Desenha Player
-    ui.spr(Sprites.Player, player.x + cx, player.y + cy)
+    ui.spr(Sprites.Player, player.x + cx, player.y + cy)[cite: 5]
 
     -- Tela de Game Over
     if game_over then
-        ui.rectfill(140, 100, 340, 170, 0)
-        ui.rect(140, 100, 340, 170, 8)
-        ui.rectfill(160, 120, 320, 150, 8)
+        ui.rectfill(140, 100, 340, 170, 0)[cite: 5]
+        ui.rect(140, 100, 340, 170, 8)[cite: 5]
+        ui.rectfill(160, 120, 320, 150, 8)[cite: 5]
     end
 end
 
