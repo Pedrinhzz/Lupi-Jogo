@@ -1,8 +1,3 @@
--- ==========================================
--- LUPI ENGINE - SYSTEM FAILURE (GEOMETRY RUNNER)
--- ==========================================
-
--- Variáveis do Jogador
 local player = {
     x = 24,
     y = 96,
@@ -33,10 +28,6 @@ local glitch = {
 }
 
 local game_over = false
-
--- ==========================================
--- LÓGICA DE ATUALIZAÇÃO
--- ==========================================
 
 function update(dt)
     if game_over then
@@ -116,10 +107,7 @@ function update(dt)
         end
     end
 end
-
--- ==========================================
--- SISTEMA DE FALHAS (GLITCHES)
--- ==========================================
+===
 
 function update_glitches()
     if glitch.active then
@@ -167,10 +155,6 @@ function reset_game()
     glitch.active = false
     game_over = false
 end
-
--- ==========================================
--- RENDERIZAÇÃO (DRAW)
--- ==========================================
 
 function draw()
     cls(0) -- Limpa tela
