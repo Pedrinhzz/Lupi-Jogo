@@ -35,14 +35,11 @@ local spawn_timer = 0
 local glitch = { active = false, type = 0, timer = 0, next_trigger = 120, cam_x = 0, cam_y = 0 }
 local game_over = false
 
--- ATENÇÃO: Substitua estas variáveis pelos seus assets reais carregados pelo motor
-local spr_player = {} 
-local spr_obstacle = {} 
-
 -- ===========================
 -- LOOP PRINCIPAL
 -- ===========================
 function update(frame)
+    -- Registro obrigatório da paleta a cada frame
     for i = 1, #Palette do
         ui.palset(i - 1, Palette[i])
     end
@@ -125,8 +122,8 @@ function update(frame)
 
     -- Efeitos visuais
     if glitch.active then
-        -- Texto indicativo de erro desenhado acima da margem superior
-        ui.print("Error!", 220 + cx, 8 + cy, 8)
+        -- Texto indicativo de erro acima da margem superior
+        ui.print("falha", 220 + cx, 8 + cy, 8)
 
         for i = 1, 5 do
             local rx = math.random(0, 460)
@@ -137,15 +134,15 @@ function update(frame)
         end
     end
 
-    -- Desenha Obstáculos utilizando sprites
+    -- Desenha Obstáculos
     for _, obs in ipairs(obstacles) do
-        local tile_id = 0
-        if obs.type == 2 then tile_id = 1 end 
-        ui.tile(spr_obstacle, tile_id, obs.x + cx, obs.y + cy)
+        local c = 8
+        if obs.type == 2 then c = 10 end
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
     end
 
-    -- Desenha Player utilizando sprites
-    ui.spr(spr_player, player.x + cx, player.y + cy)
+    -- Desenha Player
+    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
 
     -- Tela de Game Over
     if game_over then
