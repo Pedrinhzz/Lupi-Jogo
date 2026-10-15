@@ -12,7 +12,6 @@ local game_over = false
 
 function loop()
     if game_over then
-        -- Usando ui.btnp para reiniciar
         if ui.btnp(BTN_Z) or ui.btnp(UP) then
             reset_game()
         end
@@ -38,7 +37,6 @@ function loop()
                 player.grounded = false
             end
 
-            -- Usando ui.btn para pular (Seta pra cima ou botão Z)
             if (ui.btn(BTN_Z) or ui.btn(UP)) and player.grounded then
                 if glitch.active and glitch.type == 2 then
                     player.vy = -jump_force
@@ -74,37 +72,44 @@ function loop()
         end
     end
 
-    cls(0)
-    camera(glitch.cam_x, glitch.cam_y)
+    -- Limpa a tela
+    ui.cls(0)
 
-    line(0, floor_y + 8, 128, floor_y + 8, 7)
-    line(0, 16, 128, 16, 7)
+    -- Offset de câmera manual (já que não há função camera global declarada)
+    local cx = glitch.cam_x
+    local cy = glitch.cam_y
 
+    -- Desenha Chão e Teto
+    ui.line(0 + cx, floor_y + 8 + cy, 128 + cx, floor_y + 8 + cy, 7)
+    ui.line(0 + cx, 16 + cy, 128 + cx, 16 + cy, 7)
+
+    -- Efeitos visuais do glitch no fundo
     if glitch.active then
         for i = 1, 5 do
-            rectf(math.random(0, 120), math.random(20, 90), math.random(10, 30), 1, math.random(8, 14))
+            local rx = math.random(0, 120)
+            local ry = math.random(20, 90)
+            local rw = math.random(10, 30)
+            local c = math.random(8, 14)
+            -- ui.rectfill recebe (x0, y0, x1, y1, col)
+            ui.rectfill(rx + cx, ry + cy, rx + rw + cx, ry + 1 + cy, c)
         end
-        print("CRITICAL_ERR", 32, 4, 8)
-    else
-        print("SCORE: " .. score, 4, 4, 7)
     end
 
+    -- Desenha Obstáculos
     for _, obs in ipairs(obstacles) do
-        if obs.type == 1 then
-            rectf(obs.x, obs.y, obs.w, obs.h, 8)
-        else
-            rectf(obs.x, obs.y, obs.w, obs.h, 10)
-        end
+        local c = 8
+        if obs.type == 2 then c = 10 end
+        ui.rectfill(obs.x + cx, obs.y + cy, obs.x + obs.w + cx, obs.y + obs.h + cy, c)
     end
 
-    rectf(player.x, player.y, player.size, player.size, 12)
+    -- Desenha Player
+    ui.rectfill(player.x + cx, player.y + cy, player.x + player.size + cx, player.y + player.size + cy, 12)
 
+    -- Tela de Game Over
     if game_over then
-        camera(0, 0)
-        rectf(16, 40, 96, 48, 0)
-        rect(16, 40, 96, 48, 8)
-        print("SYSTEM CRASHED", 24, 48, 8)
-        print("PRESS Z TO REBOOT", 20, 64, 7)
+        ui.rectfill(16, 40, 112, 88, 0) -- Fundo preto
+        ui.rect(16, 40, 112, 88, 8)     -- Borda vermelha
+        ui.rectfill(24, 55, 104, 75, 8) -- Bloco de "Erro Fatal" vermelho simulando texto
     end
 end
 
